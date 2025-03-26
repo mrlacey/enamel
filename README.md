@@ -100,7 +100,7 @@ Page
     VerticalStackLayout
         Label
         
-        CollectionView        
+        CollectionView
 ```
 
 - Child elements may optionally be surrounded by curly braces (`{` &amp; `}`). If used, the opening brace should be on the end of the line containing the element opening. The closing brace should be on its own line and may be indented if desired.
@@ -113,7 +113,7 @@ Page {
     VerticalStackLayout {
         Label
         
-        CollectionView        
+        CollectionView
     }
 }
 ```
@@ -127,7 +127,7 @@ Page
     VerticalStackLayout 
         <Label />
         
-        <CollectionView />        
+        <CollectionView />
 ```
 
 Few elements are defined without attributes to represent the properties that are set on the types created for an element.
@@ -463,11 +463,12 @@ AUTOGRID RowDefs="*,*" ColDefs="*,*"
 will generate
 
 ```xml
-Grid RowDefinitions="*,*" ColumnDefinitions="*,*"
-    Label "Top Left" Grid.Row="0" Grid.Column="0"
-    Label "Top Right" Grid.Row="0" Grid.Column="1"
-    Label "Bottom Left" Grid.Row="1" Grid.Column="0"
-    Label "Bottom Right" Grid.Row="1" Grid.Column="1"
+<Grid RowDefinitions="*,*" ColumnDefinitions="*,*">
+    <Label "Top Left" Grid.Row="0" Grid.Column="0" />
+    <Label "Top Right" Grid.Row="0" Grid.Column="1" />
+    <Label "Bottom Left" Grid.Row="1" Grid.Column="0" />
+    <Label "Bottom Right" Grid.Row="1" Grid.Column="1" />
+</Grid>
 ```
 
 In the above, Row and Column values are assigned as both have definitions. If only one is defined (as below), that's all that is output.
@@ -482,10 +483,11 @@ AUTOGRID RowDefs="Auto,*,Auto"
 Generates
 
 ```xml
-Grid RowDefinitions="Auto,*,Auto"
-    Label "Header" Grid.Row="0"
-    Label "body" Grid.Row="1"
-    Label "Footer" Grid.Row="2"
+<Grid RowDefinitions="Auto,*,Auto" />
+    <Label "Header" Grid.Row="0" />
+    <Label "body" Grid.Row="1" />
+    <Label "Footer" Grid.Row="2" />
+</Grid>
 ```
 
 - ENAMEL supports two looping constructs. `FOR` and `FOREACH`

@@ -99,7 +99,7 @@ The following (partial) example uses elements (Types) from .NET MAUI but should 
 Page
     VerticalStackLayout
         Label
-        
+
         CollectionView
 ```
 
@@ -112,7 +112,7 @@ While neither are particularly useful, the following example is functionally equ
 Page {
     VerticalStackLayout {
         Label
-        
+
         CollectionView
     }
 }
@@ -126,7 +126,7 @@ Again, this example will produce the same output as above.
 Page 
     VerticalStackLayout 
         <Label />
-        
+
         <CollectionView />
 ```
 
@@ -177,7 +177,7 @@ Rectangle Height&Width=100
 Will produce this:
 
 ```xml
-<Rectangle Height="100" Width="100">
+<Rectangle Height="100" Width="100" />
 ```
 
 - Attributes specified as child elements can be implemented by prefixing the attribute name with a dot (`.`) to remove the need to specify the element name twice.
@@ -230,10 +230,10 @@ The ability to comment out individual attributes in XAML has been requested by m
 
 #### Advanced rules (based on settings)
 
-Much of what is generated can be controlled by specifying settings.
+Much of what is generated can be controlled by specifying settings.  
 Settings are specified in a file named `enamel-settings.json` and can be placed anywhere in the solution (or files system). When an ENAMEL file is used to generate XAML, a settings file will be sought by looking in the same directory as the file. If a settings file is not found it will look for one in parent directories, all the way up to the root of the drive.
 
-The above examples of the XAML generated have been oversimplified.
+The above examples of the XAML generated have been oversimplified.  
 All generated files automatically have an XML prolog added. There are also two settings that impact what is generated for the root element.
 
 - An `x:Class` attribute can be automatically added if `AutoGenerateClass` is set to `true`. This adds a value based on the appropriate namespace and the class name that matches the file name.
@@ -276,11 +276,11 @@ And still produce the following XAML:
 
 Not only does this remove a lot of the "noise" from the root element in an ENAMEL document, it also makes it much easier to know that all XML namespaces are available in every file and also that they all use the same alias for the same namespace.
 
-- How the generated XAML is formatted can controlled. While many formatting configuration options can be imagined, the initial version of ENAMEL is proposed to support `SingleLine` and `MultiLine` as options. These options will respectively put all the attributes on the same line as the opening element tag, or put each attribute on it's own line in the generated XAML file.
+- How the generated XAML is formatted can be controlled. While many formatting configuration options can be imagined, the initial version of ENAMEL is proposed to support `SingleLine` and `MultiLine` as options. These options will respectively put all the attributes on the same line as the opening element tag, or put each attribute on it's own line in the generated XAML file.
 
 There are also settings to simplify the specifying of attributes.
 
-- Some elements are _almost_ never used without specifying a specific attribute. Rather than repeatedly specify the name of this attribute in the ENAMEL, it can be specified in the setting as a "default attribute" and then used without specifying the attribute name when that element is used.  
+- Some elements are _almost_ never used without specifying a specific attribute. (e.g. A `Label` or `TextBlock` is almost never used without setting the `Text` attribute.) Rather than repeatedly specify the name of this attribute in the ENAMEL, it can be specified in the setting as a **"default attribute"** and then used without specifying the attribute name when that element is used.  
 To specify a value for the default attribute, it must be the first attribute specified immediately after the element name and on the same line.
 
 So, with this setting:
@@ -306,7 +306,7 @@ is  equivalent to:
 Label Text="Hello"
 ```
 
-And, as the attribute value doesn't include a space, it's acceptable to write:
+And, as the attribute value doesn't include a space, it's also acceptable to write:
 
 ```ascii
 Label Hello
@@ -344,7 +344,7 @@ In fact, if combined with the default attribute specified previously and the fac
 Label {Name}
 ```
 
-It doesn't take much to get used to being able to read that as "A Label with the Text bound to the Name property."
+It doesn't take much to get used to being able to read that as "A Label with the Text bound to the Name property (of the BindingContext/DataContext)."
 
 And as you'd expect it still produces the XAML as below.
 
@@ -490,12 +490,12 @@ Generates
 </Grid>
 ```
 
-- ENAMEL supports two looping constructs. `FOR` and `FOREACH`
+- ENAMEL supports two looping constructs: `FOR` and `FOREACH`.
 
 A `FOR` loop works with numeric values.
 
-The syntax is `FOR {identifier}={lowestNumber}..{highestNumber}`
-You can then reference the identifier in child elements with the syntax `${identifier}`
+The syntax is `FOR {identifier}={lowestNumber}..{highestNumber}`.  
+You can then reference the identifier in child elements with the syntax `${identifier}`.
 
 For each integer value in the specified range, children of the FOR element will be generated and with reference to the identifier being included where and if wanted.
 
@@ -518,8 +518,8 @@ Will generate:
 
 A `FOREACH` loop is similar to a `FOR` but iterates over an arbitrary list of strings.
 
-The syntax is `FOREACH {identifier}={comma separated list of values, optionally quote enclosed}`
-You can then reference the identifier in child element with the syntax `${identifier}`
+The syntax is `FOREACH {identifier}={comma separated list of values, optionally quote enclosed}`.  
+You can then reference the identifier in child element, with the syntax `${identifier}`.
 
 So, this ENAMEL
 
@@ -605,18 +605,18 @@ partial class InlineCSharp
 
 ```
 
-While the writing of large amounts of C# inside an ENAMEL file is probably undesirable, as a quick way to interact with or invoke something in the code behind file it may be useful. Its ability to act as a way to execute Commands on the ViewModel from a control what doesn't support invoking commands directly, it may be simpler than other "EventToCommand" solutions.
+While the writing of large amounts of C# inside an ENAMEL file is probably undesirable, as a quick way to interact with or invoke something in the code behind file it may be useful. With its ability to act as a way to execute Commands on the ViewModel from a control that doesn't support invoking commands directly, it may be simpler than other "EventToCommand" solutions.
 
 ## Why this name?
 
-Not only is ENAMEL by far the best name I've considered, there are multiple factors that 
+Not only is ENAMEL by far the best name I've considered, there are multiple factors that make it appropriate.
 
 - It's a real word and so is recognizable.
 - It's not a name used by any other technology-related project.
 - It's easy to pronounce.
-- It's a good acronym.
-- It's not too long.
-- The name overlap a lot with XAML.
+- It's a good acronym. (Experimental Native Application Markup Extension Language)
+- It's not too long. (6 letters)
+- The name overlaps a lot with XAML.
 - It can include (but is not tied to) the word "experimental" which highlights the current nature of its existence.
 - Enamel (of the porcelain variety) is tough, durable and pleasing to look at. All qualities desirable in this context too.
 - Associations to tooth enamel may be unfortunate for some people, but comparisons to a hard outer layer that offers protection from decay cannot be overlooked.
@@ -642,16 +642,18 @@ _Yes, this is .NET MAUI's default new page with some additional buttons at the b
 
 In the animation:
 
-1. The SPacing attribute (highlighted in pink) is uncommented in the ENAMEL and the file saved.
+1. The Spacing attribute (highlighted in pink) is uncommented in the ENAMEL and the file saved.
 2. This causes the XAML to be updated (yellow highlight) and that attribute added.
 3. This change is also reflected in the "pre-visualization" of the XAML.
 
-_Note. The "Pre-Visualizer" is separate to anything else discussed here._
+_Note. The "Pre-Visualizer" is separate to anything discussed here._
 
 ## Call to action
 
 ENAMEL is presented here as a possible way that development with XAML could be made simpler.  
 It is not intended as _the_ solution, but as an encouragement to discuss what might be.
+
+XAML has not seen significant improvement in far too long and other proposals offer only small, incremental change. **Let's be bold and consider a big change!**
 
 Please create or add to issues with any thoughts, comments, concerns, suggestions, ideas, etc.
 

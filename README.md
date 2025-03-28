@@ -25,6 +25,8 @@ And this is the exact same thing in ENAMEL.
 ContentPage
 ```
 
+_There are more examples comparing XAML and ENAMEL [here](./comparisons/)_
+
 ENAMEL: Simple, human readable, and easily maintainable UI markup.
 
 ## Introduction
@@ -483,7 +485,7 @@ Introducing `AUTOGRID`
 
 `AUTOGRID` (**in all caps-like all ENAMEL keywords**) is like a regular Grid but it will automatically assign Row and Column values to it's direct child elements based on the defined row and column definitions.
 
-So, this: 
+So, this:
 
 ```ascii
 AUTOGRID RowDefs="*,*" ColDefs="*,*"

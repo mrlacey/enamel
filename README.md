@@ -1,5 +1,34 @@
 # ENAMEL - An RFC for possible future XAML-based development
 
+## Executive Summary / TLDR
+
+A new, simplified markup language to define application UI. The new files automatically generate comparable XAML files for your WPF, .NET MAUI, or WinUI app which is then compiled as normal. Fully configurable, totally optional (use it for some or all XAML files) and low risk as the XAML (and C#) files are still available.
+
+It addresses the common complaints about having to work with XAML and adds new functionality without the need to change any of the existing tooling.
+
+How much less verbose is it?
+
+Well, this is the XAML for an Empty page in a .NET MAUI app.
+
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="NewMauiApp.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+</ContentPage>
+```
+
+And this is the exact same thing in ENAMEL.
+
+```enamel
+ContentPage
+```
+
+ENAMEL: Simple, human readable, and easily maintainable UI markup.
+
+## Introduction
+
 For many developers, XAML (eXtensible Application Markup Language) is seen as verbose, hard to read, and difficult to work with. There are others who describe it a "fine" or "adequate".  
 For both groups, that there has been no significant update to XAML since its launch, almost twenty years ago, highlights that it is overdue to consider what improvements or enhancements may be appropriate.
 
@@ -19,11 +48,11 @@ Changing XAML is hard. Modifications risk breaking existing code and tooling.
 
 A complete replacement would make some people think that they need to rewrite everything they currently have or be stuck on a legacy technology that would fail to get further updates. The plethora of options for building native Windows apps (many of which use XAML) already creates this feeling in many. Any solution should not look to extend this uncertainty. Similarly, .NET MAUI is growing steadily after the conversion from Xamarin.Forms. It would not be desirable to create confusion amongst users and those considering it after such a big, recent change.
 
-An additional option for defining UIs would also increase the total support overhead as XAML would still need to be supported for many years to come.
+An additional (official) option for defining UIs would also increase the total support overhead as XAML would still need to be supported for many years to come.
 
-Variants of XAML are used by multiple frameworks and project types. These include (but are not limited to) WPF, .NET MAUI, WinUI, and more. Ideally, any change or alternative to XAML should not be limited to only one of these.
+Variants of XAML are used by multiple frameworks and project types. These include (but are not limited to) WPF, .NET MAUI, and WinUI. Ideally, any change or alternative to XAML should not be limited to only one of these.
 
-Creating a new, alternative language and integrating it with the tooling (Visual Studio) and the frameworks where it is used, has the potential to be a large amount of complex work. This risks prohibiting the number of possible alternatives that can be tried and the number of people with the skills to create such experiments. It's in no one's time or interest to take a lot of time (and/or spend a lot of money) on an experiment that may not turn into an actual product.
+Creating a new, alternative language and integrating it with the tooling (IDEs, compilers, CI/CD systems) and the frameworks where it is used, has the potential to be a large amount of complex work. This risks prohibiting the number of possible alternatives that can be tried and the number of people with the skills to create such experiments. It's in no one's interest to take a lot of time (and/or spend a lot of money) on an experiment that may not turn into an actual product.
 
 Trying new languages can be risky.  
 Trivial demos rarely give a true impression of what a language is like to build "real" applications with. Completely rewriting an existing app can be time-consuming. Building something entirely new presents potential maintenance issues if the new app is wanted but the technology used to build it is not fully adopted.
@@ -49,7 +78,7 @@ It's also optional in the sense that anyone happy with XAML as it currently is, 
 It relies on a simple but powerful ruleset that is explained in detail below. By having such a small and specific set of rules it is easy to learn. These rules and syntax are also optimized for human readability, rather than the rigorous structure of something (XML) initially intended for reading and writing by machines.
 
 In addition to producing XAML, ENAMEL also accepts XAML as valid input. Not only does this make migrating XAML to ENAMEL a trivial process, it also makes it easy to explore how it works with more complex examples in existing codebases.
-An additional benefit of supporting "inline XAML" within an ENAMEL file is that it offers a fallback options for any particular elements that ENAMEL does not support or someone chooses not to convert.
+An additional benefit of supporting "inline XAML" within an ENAMEL file is that it offers a fallback option for any particular elements that ENAMEL does not support or someone chooses not to convert.
 
 It's not magic, it's just source generation. Source generation is increasingly used and accepted in .NET and other technology stacks. This proposed solution may be well timed to be accepted based on the widespread adoption of source generated C# code elsewhere in project that would use this.
 
@@ -296,6 +325,8 @@ So, with this setting:
 }
 ```
 
+this:
+
 ```ascii
 Label "Hello"
 ```
@@ -338,7 +369,7 @@ Label Text="{Binding Name}"
 Label Text="{Name}"
 ```
 
-In fact, if combined with the default attribute specified previously and the fact that the attribute value has no space, the ENAMEL can become even simpler.
+In fact, if combined with the default attribute specified previously and the fact that the attribute value has no space, the ENAMEL can become even simpler:
 
 ```ascii
 Label {Name}
@@ -450,7 +481,9 @@ Improved ways of working with complex grids may come in time, but Grids are some
 
 Introducing `AUTOGRID`
 
-`AUTOGRID` (in all caps-like all ENAMEL keywords) is like a regular Grid but it will automatically assign Row and Column values to it's direct child elements based on the defined row and column definitions.
+`AUTOGRID` (**in all caps-like all ENAMEL keywords**) is like a regular Grid but it will automatically assign Row and Column values to it's direct child elements based on the defined row and column definitions.
+
+So, this: 
 
 ```ascii
 AUTOGRID RowDefs="*,*" ColDefs="*,*"
@@ -497,7 +530,7 @@ A `FOR` loop works with numeric values.
 The syntax is `FOR {identifier}={lowestNumber}..{highestNumber}`.  
 You can then reference the identifier in child elements with the syntax `${identifier}`.
 
-For each integer value in the specified range, children of the FOR element will be generated and with reference to the identifier being included where and if wanted.
+For each integer value in the specified range, children of the `FOR` element will be generated and with reference to the identifier being included where and if wanted.
 
 For example:
 
@@ -541,7 +574,7 @@ generates this XAML
 
 An attempt to consider the future evolution of XAML would be incomplete without exploring the possibility of also incorporating C# code within the file.
 
-Rather than attempting to recreate something like Razor pages, the approach here is to try and incorporate simple C# snippets into the file where the GUI is defined, rather than having to enter them into the "code behind" file.
+Rather than attempting to recreate something like Razor pages (which would require changes to the platforms using the XAML files), the approach here is to try and incorporate simple C# snippets into the file where the GUI is defined, rather than having to enter them into the "code behind" file.
 
 C# code can be specified in the value of an attribute representing an Event. To make it clear that this is "inline C#" code, the attribute value is prefixed and suffixed with at signs (`@`). This is to make it clear that the attribute value is different from other attributes and a variation on the use of curly braces to indicate Markup Expressions.
 
@@ -549,13 +582,13 @@ When the XAML is generated, the attribute value is replaced with a generated eve
 
 An example makes it clearer.
 
-Initial file: `example.enml` (partial)
+Initial file: `InlineExamplePage.enml` (partial)
 
 ```ascii
 Button "operate on variables inside the code behind file"
     Clicked="@ count=0; @"
 
-Button "Invoke it!"
+Button "Invoke the command!"
     Clicked="@ vm.MyCommand.Invoke(); @"
 
 Button "do something"
@@ -563,7 +596,7 @@ Button "do something"
        Clicked="@ DoSomething(); @"
 ```
 
-Generated file: `example.xaml` (partial)
+Generated file: `InlineExamplePage.xaml` (partial)
 
 ```xml
 <Button 
@@ -571,7 +604,7 @@ Generated file: `example.xaml` (partial)
     Clicked="Gen_On_Button1_Clicked" />
 
 <Button
-     Text="Invoke it!"
+     Text="Invoke the command!"
      Clicked="Gen_On_Button2_Clicked" />
 
 <Button
@@ -580,12 +613,12 @@ Generated file: `example.xaml` (partial)
     Clicked="Gen_On_MyButton_Clicked" />
 ```
 
-Additional generated file: `example.enml.cs` (full)
+Additional generated file: `InlineExamplePage.enml.cs` (full)
 
 ```csharp
 namespace MyDemoApp.Views;
 
-partial class InlineCSharp
+partial class InlineExamplePage
 {
     private void Gen_On_Button1_Clicked(object sender, EventArgs e)
     {
@@ -605,11 +638,12 @@ partial class InlineCSharp
 
 ```
 
-While the writing of large amounts of C# inside an ENAMEL file is probably undesirable, as a quick way to interact with or invoke something in the code behind file it may be useful. With its ability to act as a way to execute Commands on the ViewModel from a control that doesn't support invoking commands directly, it may be simpler than other "EventToCommand" solutions.
+While the writing of large amounts of C# inside an ENAMEL file is probably undesirable, as a quick way to interact with or invoke something in the code behind file it may be useful.  
+With its ability to act as a way to execute Commands on the ViewModel from a control that doesn't support invoking commands directly, it may be simpler than other "EventToCommand" solutions.
 
 ## Why this name?
 
-Not only is ENAMEL by far the best name I've considered, there are multiple factors that make it appropriate.
+Not only is ENAMEL by far the best name so far considered, there are multiple factors that make it appropriate:
 
 - It's a real word and so is recognizable.
 - It's not a name used by any other technology-related project.

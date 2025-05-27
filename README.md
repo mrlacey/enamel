@@ -572,6 +572,7 @@ generates this XAML
     <Label Text="three hundred" />
 ```
 
+Nested loops are supported but will require the use of different identifiers to avoid unexpected results.
 #### Generating multiple files
 
 An attempt to consider the future evolution of XAML would be incomplete without exploring the possibility of also incorporating C# code within the file.

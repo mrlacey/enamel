@@ -611,6 +611,29 @@ generates this XAML
 
 Nested loops are supported but will require the use of different identifiers to avoid unexpected results.
 
+The `SET` keyword is intended to help simplifying the setting of properties within a resource as an alternative to the use of a `<Setter />` element when only the `Property` and `Value` need to be specified.
+
+The syntax is `SET {PropertyName}={PropertyValue}`.  Quotes around the `{PropertyValue}` are optional unless needed to enclose spaces.
+
+As an example, this input
+
+```ascii
+Style TargetType=Button
+    SET Border=1
+    SET Background=Blue
+```
+
+produces:
+
+```xml
+<Style TargetType="Button">
+    <Setter Property="Border" Value="1" />
+    <Setter Property="Background" Value="Blue" />
+</Style>
+```
+
+The aim of this keyword is to enable the removal of text that is implied through the standard syntax used elsewhere. When additional properties of the `Setter` need to be specified or more complex values are needed for the `{PropertyValue}`, this can be done without using the keyword.
+
 #### Generating multiple files
 
 An attempt to consider the future evolution of XAML would be incomplete without exploring the possibility of also incorporating C# code within the file.

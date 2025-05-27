@@ -580,6 +580,8 @@ Rather than attempting to recreate something like Razor pages (which would requi
 
 C# code can be specified in the value of an attribute representing an Event. To make it clear that this is "inline C#" code, the attribute value is prefixed and suffixed with at signs (`@`). This is to make it clear that the attribute value is different from other attributes and a variation on the use of curly braces to indicate Markup Expressions.
 
+The trailing `;` is not required within the ENAMEL file and will be added if not included.
+
 When the XAML is generated, the attribute value is replaced with a generated event name and an additional C# file is created containing a partial class with events that contain the C# from the .enml file.
 
 An example makes it clearer.
@@ -588,14 +590,14 @@ Initial file: `InlineExamplePage.enml` (partial)
 
 ```ascii
 Button "operate on variables inside the code behind file"
-    Clicked="@ count=0; @"
+    Clicked="@ count=0 @"
 
 Button "Invoke the command!"
-    Clicked="@ vm.MyCommand.Invoke(); @"
+    Clicked="@ vm.MyCommand.Invoke() @"
 
 Button "do something"
        x:Name="MyButton"
-       Clicked="@ DoSomething(); @"
+       Clicked="@ DoSomething() @"
 ```
 
 Generated file: `InlineExamplePage.xaml` (partial)

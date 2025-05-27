@@ -309,7 +309,42 @@ Not only does this remove a lot of the "noise" from the root element in an ENAME
 
 - How the generated XAML is formatted can be controlled. While many formatting configuration options can be imagined, the initial version of ENAMEL is proposed to support `SingleLine` and `MultiLine` as options. These options will respectively put all the attributes on the same line as the opening element tag, or put each attribute on it's own line in the generated XAML file.
 
-There are also settings to simplify the specifying of attributes.
+- How the generated XAML treats the RowDefinitions and GridDefinitions of a Grid can be controlled, to allow universal support for the simplified syntax.
+
+With the following setting set to true
+
+```json
+{    
+    "ExpandGridDefinitions": true,
+}
+```
+
+This ENAMEL
+
+```ascii
+Grid RowDefinitions="*,Auto,*" ColumnDefinitions="*,12,2*"
+```
+
+will produce this XAML
+
+```xml
+<Grid>
+    <RowDefinitions>
+        <RowDefinition Height="*" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+    </RowDefinitions>
+    <ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="12" />
+        <ColumnDefinition Width="2*" />
+    </ColumnDefinitions>
+</Grid>
+```
+
+This is to support frameworks that do not (yet?) support the "inline syntax" or for those who prefer the other format.
+
+##### There are also settings to simplify the specifying of attributes
 
 - Some elements are _almost_ never used without specifying a specific attribute. (e.g. A `Label` or `TextBlock` is almost never used without setting the `Text` attribute.) Rather than repeatedly specify the name of this attribute in the ENAMEL, it can be specified in the setting as a **"default attribute"** and then used without specifying the attribute name when that element is used.  
 To specify a value for the default attribute, it must be the first attribute specified immediately after the element name and on the same line.
@@ -526,6 +561,7 @@ Generates
 ```
 
 Nested AUTOGRIDs are not supported or recommended because Grids within Grids add extra complexity for the reader. If required, the desired output can be achieved through the use of multiple files or using the Grid element directly.
+
 - ENAMEL supports two looping constructs: `FOR` and `FOREACH`.
 
 A `FOR` loop works with numeric values.
@@ -574,6 +610,7 @@ generates this XAML
 ```
 
 Nested loops are supported but will require the use of different identifiers to avoid unexpected results.
+
 #### Generating multiple files
 
 An attempt to consider the future evolution of XAML would be incomplete without exploring the possibility of also incorporating C# code within the file.

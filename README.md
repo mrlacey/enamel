@@ -525,6 +525,7 @@ Generates
 </Grid>
 ```
 
+Nested AUTOGRIDs are not supported or recommended because Grids within Grids add extra complexity for the reader. If required, the desired output can be achieved through the use of multiple files or using the Grid element directly.
 - ENAMEL supports two looping constructs: `FOR` and `FOREACH`.
 
 A `FOR` loop works with numeric values.
